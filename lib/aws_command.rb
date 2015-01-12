@@ -40,6 +40,13 @@ module OpenShift
         ah.extra_vars['oo_new_inst_tags'].merge!(AwsHelper.generate_host_type_tag(options[:type]))
         ah.extra_vars['oo_new_inst_tags'].merge!(AwsHelper.generate_env_host_type_tag(options[:env], options[:type]))
 
+        # Check if we install a custom openshift
+        if !ENV['OO_OPENSHIFT_BINARY'].nil?
+          ah.extra_vars['oo_openshift_binary'] = ENV['OO_OPENSHIFT_BINARY']
+          FileUtils.cp(ENV['OO_OPENSHIFT_BINARY'], 'roles/openshift_master/files')
+          FileUtils.cp(ENV['OO_OPENSHIFT_BINARY'], 'roles/openshift_minion/files')
+        end
+
         puts
         puts "Creating #{options[:count]} #{options[:type]} instance(s) in AWS..."
         ah.ignore_bug_6407
