@@ -7,7 +7,7 @@
 
   vars:
     inst_region: us-east-1
-    atomic_ami: ami-86781fee
+    atomic_ami: ami-d2ee9fba
     user_data_file: user_data.txt
 
   vars_files:
@@ -18,9 +18,9 @@
       ec2:
         state: present
         region: "{{ inst_region }}"
-        keypair: libra
+        keypair: lenaic@ncelhuard-Xperiment
         group: ['public']
-        instance_type: m3.large
+        instance_type: t2.micro
         image: "{{ atomic_ami }}"
         count: "{{ oo_new_inst_names | oo_len }}"
         user_data: "{{ lookup('file', user_data_file) }}"
