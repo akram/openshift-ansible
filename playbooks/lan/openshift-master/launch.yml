@@ -1,0 +1,3 @@
+---
+# Apply the configs, seprate so that just the configs can be run by themselves
+- include: config.yml
