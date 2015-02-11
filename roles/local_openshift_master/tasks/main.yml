@@ -1,0 +1,39 @@
+---
+# tasks file for openshift_master
+
+  # fixme: Once openshift stops resolving hostnames for minion queries remove this...
+- name: Set hostname to IP Addr (WORKAROUND)
+  hostname: name={{ oo_bind_ip }}
+
+- include: openshift_from_yum.yml
+  when: oo_openshift_binary is not defined
+
+- include: openshift_from_local.yml
+  when: oo_openshift_binary is defined
+
+- name: Configure OpenShift Master settings
+  lineinfile: >
+    dest=/etc/sysconfig/openshift
+    create=yes
+    regexp={{ item.regex }}
+    line="{{ item.line }}"
+  with_items:
+    - { regex: '^ROLE=', line: 'ROLE=\"master\"' }
+    - { regex: '^OPTIONS=', line: 'OPTIONS=\"--nodes={{ oo_minion_ips | join(",") }}  --loglevel=5\"' }
+  notify:
+    - restart openshift-master
+
+- name: Open firewalld port for etcd embedded in OpenShift
+  firewalld: port=4001/tcp permanent=false state=enabled
+
+- name: Save firewalld port for etcd embedded in
+  firewalld: port=4001/tcp permanent=true state=enabled
+
+- name: Open firewalld port for OpenShift
+  firewalld: port=8080/tcp permanent=false state=enabled
+
+- name: Save firewalld port for OpenShift
+  firewalld: port=8080/tcp permanent=true state=enabled
+
+- name: Enable OpenShift
+  service: name=openshift enabled=yes state=started

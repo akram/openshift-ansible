@@ -1,0 +1,26 @@
+---
+- name: "Force fact gathering"
+  hosts: minions
+  connection: ssh
+  user: root
+  tasks:
+    - name: Gather fact
+      setup: filter=ansible_local
+
+- name: "Configure instances"
+  hosts: minions
+  connection: ssh
+  user: root
+  vars_files:
+    - vars.yml
+  roles:
+    - { role: ../../../roles/minion_indices,
+        oo_minion_subnet_index: [1, 2 ], 
+        oo_nb_minions: "2"
+        }
+
+# Apply the configs, seprate so that just the configs can be run by themselves
+- include: config.yml
+
+
+

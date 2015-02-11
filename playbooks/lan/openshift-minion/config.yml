@@ -1,0 +1,44 @@
+- name: "Gather facts for masters in {{ oo_env }}"
+  hosts: masters
+  connection: ssh
+  user: root
+
+
+# This should be done separetly
+- name: "Set Origin specific facts on localhost (for later use)"
+  hosts: minions
+  gather_facts: no
+  tasks:
+  - name: Setting oo_master_ips fact on localhost
+    set_fact:
+      oo_master_ips: "{{ hostvars
+          | oo_select_keys(groups['masters'])
+          | oo_collect(attribute='ansible_default_ipv4.address') }}"
+      when: groups['masters'] is defined
+
+
+- name: "Configure instances"
+  hosts: minions
+  connection: ssh
+  user: root
+  vars_files:
+  - vars.yml
+
+  tags: config
+  tasks:
+  - name: re-read facts after adding custom fact
+    setup: filter=ansible_local
+
+  roles:
+  - ../../../roles/base_os
+  - ../../../roles/repos
+  - {
+     role: ../../../roles/overlay_network,
+     oo_public_ip: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address | default(['']) }}"
+    }
+  - ../../../roles/docker
+  - {
+     role: ../../../roles/local_openshift_minion,
+     oo_master_ips: "{{ hostvars['localhost'].oo_master_ips | default(['']) }}",
+     oo_bind_ip: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address | default(['']) }}"
+    }
