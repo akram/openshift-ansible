@@ -15,8 +15,7 @@
     - vars.yml
   roles:
     - { role: ../../../roles/minion_indices,
-        oo_minion_subnet_index: [1, 2 ], 
-        oo_nb_minions: "2"
+        oo_nb_minions: "{{ groups['minions'] | count }}"
         }
 
 # Apply the configs, seprate so that just the configs can be run by themselves
