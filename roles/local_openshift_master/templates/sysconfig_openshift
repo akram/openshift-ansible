@@ -1,2 +1,0 @@
-ROLE="master"
-OPTIONS="--nodes={{ oo_minion_ips | join(",") }}  --loglevel=5"

@@ -1,24 +1,23 @@
 - name: "Gather facts for minions in {{ oo_env }}"
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   connection: ssh
   user: root
 
 # This should be done separetly
 - name: "Set Origin specific facts on localhost (for later use)"
-  hosts: masters
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-master"
   gather_facts: no
   tasks:
     - name: Setting oo_minion_ips fact on localhost
       set_fact:
         oo_minion_ips: "{{ hostvars
-            | oo_select_keys(groups['minions'])
+            | oo_select_keys(groups['tag_env-host-type_' + oo_env + '-openshift-minion'])
             | oo_collect(attribute='ansible_default_ipv4.address') }}"
-      when: groups['minions'] is defined
+      when: groups['tag_env-host-type_' + oo_env + '-openshift-minion'] is defined
 
 
 - name: "Configure instances"
-#  hosts: oo_hosts_to_config
-  hosts: masters
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-master"
   connection: ssh
   user: root
   vars_files:
@@ -34,19 +33,19 @@
     - ../../../roles/base_os
     - ../../../roles/repos
     - {
-        role: ../../../roles/local_openshift_master,
+        role: ../../../roles/openshift_master,
         oo_minion_ips: "{{  hostvars['localhost'].oo_minion_ips | default(['']) }}",
         oo_bind_ip: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address | default(['']) }}"
       }
     - ../../../roles/pods
 
 - name: Copy certificate files from master to minions
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   connection: ssh
   user: root
   tasks:
     - name: Copy certificate files from master to minions
       synchronize: mode=push src=/var/run/openshift/openshift.local.certificates dest=/var/run/openshift set_remote_user=true
-      #delegate_to: localhost
+      delegate_to: "{{ groups['tag_env-host-type_' + oo_env + '-openshift-master'][0] }}" 
 
 

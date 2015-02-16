@@ -1,22 +1,38 @@
 ---
+
+
+
 # tasks file for docker
 - name: Install docker
-  yum: pkg=docker
+  yum: pkg=docker disablerepo=fedora
 
-- name: Configure docker
-  lineinfile: >
-    dest=/etc/sysconfig/docker
-    regexp={{ item.regex }}
-    line="{{ item.line }}"
-  with_items:
-    - { regex: '^OPTIONS=', line: 'OPTIONS=--selinux-enabled -H fd:// -b kbr0 --iptables=false' }
-  notify:
-    - restart docker
+
+
+# first ensure our target directory exists
+- file: dest=/etc/systemd/system state=directory
+
+- name: "Copy systemd unit for docker socket and docker service"
+  copy: src={{ item }} dest=/etc/systemd/system owner=root mode=644
+  with_fileglob:
+    - systemd/system/*
+  notify: reload systemd
+
+# first ensure our target directory exists
+- file: dest=/etc/sysconfig state=directory
+
+- name: "Copy sysconfig custom configuration files for docker"
+  copy: src={{ item }} dest=/etc/sysconfig owner=root mode=644
+  with_fileglob:
+    - sysconfig/*
+  notify: restart docker
 
 - name: start and enable docker service
-  service: name=docker enabled=yes state=started
+  service: name=docker.socket enabled=yes state=started
 
 - copy: src=enter-container.sh dest=/usr/local/bin/enter-container.sh mode=0755
 
 - name: Ensure that root is in the Docker group
   user: name=root groups=docker append=yes
+
+
+

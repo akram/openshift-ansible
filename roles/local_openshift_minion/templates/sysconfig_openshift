@@ -1,7 +1,0 @@
-
-CERT_DIR=/var/run/openshift/openshift.local.certificates
-KUBECONFIG=$CERT_DIR/kube-client/.kubeconfig
-
-ROLE="node"
-OPTIONS="--master=https://{{ oo_master_ips[0] }}:8443  --loglevel=1 --kubeconfig=$KUBECONFIG"
-

@@ -1,24 +1,24 @@
 - name: "Gather facts for masters in {{ oo_env }}"
-  hosts: masters
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-master"
   connection: ssh
   user: root
 
 
 # This should be done separetly
 - name: "Set Origin specific facts on localhost (for later use)"
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   gather_facts: no
   tasks:
   - name: Setting oo_master_ips fact on localhost
     set_fact:
       oo_master_ips: "{{ hostvars
-          | oo_select_keys(groups['masters'])
+          | oo_select_keys(groups['tag_env-host-type_' + oo_env + '-openshift-master'])
           | oo_collect(attribute='ansible_default_ipv4.address') }}"
-      when: groups['masters'] is defined
+      when: groups['tag_env-host-type_' + oo_env + '-openshift-master'] is defined
 
 
 - name: "Configure instances"
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   connection: ssh
   user: root
   vars_files:
@@ -38,7 +38,7 @@
     }
   - ../../../roles/docker
   - {
-     role: ../../../roles/local_openshift_minion,
+     role: ../../../roles/openshift_minion,
      oo_master_ips: "{{ hostvars['localhost'].oo_master_ips | default(['']) }}",
      oo_bind_ip: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address | default(['']) }}"
     }

@@ -1,0 +1,6 @@
+[docker-centos]
+name=added from: http://mirror.centos.org/centos/7/extras/x86_64/
+baseurl=http://mirror.centos.org/centos/7/extras/x86_64/
+enabled=1
+gpgcheck=0
+

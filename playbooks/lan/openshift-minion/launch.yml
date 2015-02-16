@@ -1,6 +1,6 @@
 ---
 - name: "Force fact gathering"
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   connection: ssh
   user: root
   tasks:
@@ -8,14 +8,14 @@
       setup: filter=ansible_local
 
 - name: "Configure instances"
-  hosts: minions
+  hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"
   connection: ssh
   user: root
   vars_files:
     - vars.yml
   roles:
     - { role: ../../../roles/minion_indices,
-        oo_nb_minions: "{{ groups['minions'] | count }}"
+        oo_nb_minions: "{{ groups['tag_env-host-type_' + oo_env + '-openshift-minion'] | count }}"
         }
 
 # Apply the configs, seprate so that just the configs can be run by themselves
