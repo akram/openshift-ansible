@@ -5,6 +5,12 @@
 - name: Set hostname to IP Addr (WORKAROUND)
   hostname: name={{ oo_bind_ip }}
 
+- name: Update the nb_minons local fact on all the minions
+  lineinfile:
+    dest: /etc/ansible/facts.d/minion.fact
+    regexp: '^nb_minions'
+    line: "nb_minions={{ hostvars | oo_select_keys( groups[ 'tag_env-host-type_' + oo_env + '-openshift-minion' ] ) | oo_collect('ansible_local') | oo_collect('minion') | oo_collect('minion') | oo_collect('nb_minions') | map('int') | max }}"
+
 - include: openshift_from_yum.yml
   when: oo_openshift_binary is not defined
 
