@@ -25,8 +25,11 @@
   tags: config
 
   tasks:
-  - name: re-read facts after adding custom fact
-    setup: filter=ansible_local
+    - name: re-read facts after adding custom fact
+      setup: filter=ansible_local
+
+    - name: Check rsync is installed
+      yum: name=rsync state=present
 
 
   roles:
@@ -44,6 +47,12 @@
   connection: ssh
   user: root
   tasks:
+    - name: Create openshift certificate directory
+      file: path=/var/run/openshift state=directory
+
+    - name: Check rsync is installed
+      yum: name=rsync state=present
+
     - name: Copy certificate files from master to minions
       synchronize: mode=push src=/var/run/openshift/openshift.local.certificates dest=/var/run/openshift set_remote_user=true
       delegate_to: "{{ groups['tag_env-host-type_' + oo_env + '-openshift-master'][0] }}" 
