@@ -31,6 +31,7 @@ module OpenShift
         end
 
         ah = AnsibleHelper.for_aws()
+				ah.verbosity = ''
 
         # AWS specific configs
         ah.extra_vars['oo_new_inst_names'] = names
@@ -91,6 +92,7 @@ module OpenShift
       desc "config", 'Configures instances.'
       def config()
         ah = AnsibleHelper.for_aws()
+				ah.verbosity = ''
 
         abort 'Error: you can\'t specify both --name and --type' unless options[:type].nil? || options[:name].nil?
 

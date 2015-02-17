@@ -20,6 +20,7 @@ module OpenShift
       desc "launch", 'Launches instances.'
       def launch()
         ah = AnsibleHelper.for_lan()
+				ah.verbosity = ''
 
         host_type = options[:type]
 
@@ -51,6 +52,7 @@ module OpenShift
       desc "config", 'Configure instances.'
       def config()
         ah = AnsibleHelper.for_lan()
+        ah.verbosity = ''
 
         host_type = options[:type]
 
