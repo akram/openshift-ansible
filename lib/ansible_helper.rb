@@ -94,11 +94,15 @@ extra_vars: #{@extra_vars.to_json}
 
       def self.for_aws
         ah = AnsibleHelper.new
-
         ah.inventory = 'inventory/aws/ec2.py'
         return ah
       end
 
+      def self.for_lan
+        ah = AnsibleHelper.new
+        ah.inventory = 'local_ansible_inventory.ini'
+        return ah
+      end
 
       def ignore_bug_6407
         puts

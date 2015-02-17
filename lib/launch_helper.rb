@@ -25,6 +25,10 @@ module OpenShift
       def self.get_aws_host_types()
         return Dir.glob("#{MYDIR}/../playbooks/aws/*").map { |d| File.basename(d) }
       end
+
+      def self.get_lan_host_types()
+        return Dir.glob("#{MYDIR}/../playbooks/lan/*").map { |d| File.basename(d) }
+      end
     end
   end
 end

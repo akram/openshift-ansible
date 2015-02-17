@@ -3,6 +3,7 @@
 require 'thor'
 require_relative 'lib/gce_command'
 require_relative 'lib/aws_command'
+require_relative 'lib/lan_command'
 
 # Don't buffer output to the client
 STDOUT.sync = true
@@ -16,6 +17,9 @@ module OpenShift
 
       desc 'aws', 'Manages Amazon Web Services assets'
       subcommand "aws", AwsCommand
+
+      desc 'lan', 'Manages a static cluster'
+      subcommand "lan", LanCommand
     end
   end
 end
