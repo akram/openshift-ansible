@@ -15,28 +15,10 @@ module OpenShift
              :desc => 'The type of the instances to configure.'
       option :env, :required => true, :aliases => '-e', :enum => SUPPORTED_ENVS,
              :desc => 'The environment of the new instances.'
-      desc "config", 'Configure instances.'
-      def config()
-        ah = AnsibleHelper.for_lan()
-
-        host_type = options[:type]
-
-        ah.extra_vars['oo_env'] = options[:env]
-
-        # Check if we install a custom openshift
-        if !ENV['OO_OPENSHIFT_BINARY'].nil?
-          ah.extra_vars['oo_openshift_binary'] = File.expand_path(ENV['OO_OPENSHIFT_BINARY'])
-        end
-
-        ah.run_playbook("playbooks/lan/#{host_type}/config.yml")
-      end
-
-      option :type, :required => true, :enum => LaunchHelper.get_lan_host_types,
-             :desc => 'The type of the instances to configure.'
-      option :env, :required => true, :aliases => '-e', :enum => SUPPORTED_ENVS,
-             :desc => 'The environment of the new instances.'
+      option :count, :aliases => '-c'
+      option :skip_config, :type => :boolean
       desc "launch", 'Launches instances.'
-      def config()
+      def launch()
         ah = AnsibleHelper.for_lan()
 
         host_type = options[:type]
@@ -60,6 +42,26 @@ module OpenShift
         end
 
         ah.run_playbook("playbooks/lan/#{host_type}/launch.yml")
+      end
+
+      option :type, :required => true, :enum => LaunchHelper.get_lan_host_types,
+             :desc => 'The type of the instances to configure.'
+      option :env, :required => true, :aliases => '-e', :enum => SUPPORTED_ENVS,
+             :desc => 'The environment of the new instances.'
+      desc "config", 'Configure instances.'
+      def config()
+        ah = AnsibleHelper.for_lan()
+
+        host_type = options[:type]
+
+        ah.extra_vars['oo_env'] = options[:env]
+
+        # Check if we install a custom openshift
+        if !ENV['OO_OPENSHIFT_BINARY'].nil?
+          ah.extra_vars['oo_openshift_binary'] = File.expand_path(ENV['OO_OPENSHIFT_BINARY'])
+        end
+
+        ah.run_playbook("playbooks/lan/#{host_type}/config.yml")
       end
     end
   end
