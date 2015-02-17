@@ -1,7 +1,11 @@
 ---
 # handlers file for docker
+- name: restart docker socket
+  service: name=docker.socket state=restarted
+
 - name: restart docker
-  service: name=docker state=restarted
+  service: name=docker.service state=stopped
+  notify: restart docker socket
 
 
 - name: reload systemd
