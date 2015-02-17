@@ -1,6 +1,10 @@
 ---
-- name: Transfer the fedora_apache pod template
+- name: Create destination directory for example pod template
   file: path=/usr/local/etc/pods state=directory
 
-- name: Transfer the fedora_apache pod template
-  copy: directory_mode=on src=pods/ dest=/usr/local/etc/pods/
+- name: Transfer example pod templates
+  copy: src=pods/ dest=/usr/local/etc/pods/
+
+
+- name: Create openshift router preconfigured pod example
+  template: src="openshift-router.json" dest="/usr/local/etc/pods/openshift-router.json"

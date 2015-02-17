@@ -3,6 +3,7 @@
     src: '{{ oo_openshift_binary }}'
     dest: /usr/local/bin/openshift
     mode: 0755
+  notify: restart openshift-master
 
 - name: Create openshift WorkingDirectory
   file: path=/var/run/openshift owner=root state=directory

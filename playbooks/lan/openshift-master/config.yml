@@ -40,7 +40,10 @@
         oo_minion_ips: "{{  hostvars['localhost'].oo_minion_ips | default(['']) }}",
         oo_bind_ip: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address | default(['']) }}"
       }
-    - ../../../roles/pods
+    - {
+        role: ../../../roles/pods,
+        oo_master_ip: "{{ groups['tag_env-host-type_' + oo_env + '-openshift-master'][0] }}"
+      }
 
 - name: Copy certificate files from master to minions
   hosts: "tag_env-host-type_{{ oo_env }}-openshift-minion"

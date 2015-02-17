@@ -46,7 +46,15 @@ The ansible on premise playbooks uses the synchronize module to copy
 Openshift master ceritificates from the master to the minions.
 This module requires agent forwarding to be enable to avoid having to 
 add the public key of the master to the authorized_keys of the minions.
-
+In your $HOME/.ssh/config
+```
+ForwardAgent yes
+```
+many Unix distribution requires that the ssh-agent should be started:
+```
+eval `ssh-agent -s`
+ssh-add
+```
 
 1. Launch the ansible playbooks manually
 ```

@@ -19,7 +19,7 @@
     line="{{ item.line }}"
   with_items:
     - { regex: '^ROLE=', line: 'ROLE=\"master\"' }
-    - { regex: '^OPTIONS=', line: 'OPTIONS=\"--nodes={{ oo_minion_ips | join(",") }}  --loglevel=5\"' }
+    - { regex: '^OPTIONS=', line: 'OPTIONS=\"--nodes={{ oo_minion_ips | join(",") }}  --loglevel=1\"' }
   notify:
     - restart openshift-master
 
