@@ -5,7 +5,7 @@
 # OO_PROVIDER
 #
 # Selects the cloud provider to use
-# Choices: gce, aws
+# Choices: gce, aws, lan
 # Default: gce
 
 #export OO_PROVIDER=aws
@@ -24,6 +24,16 @@
 
 #export MINIONS=2
 
+# OO_OPENSHIFT_BINARY
+#
+# Path of a locally built openshift binary
+#
+# If this variable is set, then, the locally built openshift will be installed
+# in /usr/local/bin on the AWS machines.
+# If this variable is not set, then, openshift will be installed from the yum repository
+
+#export OO_OPENSHIFT_BINARY=$HOME/doc/prog/RedHat/origin/_output/local/go/bin/openshift
+
 ################
 # GCE settings #
 ################
@@ -40,16 +50,6 @@
 #source ~/.awscred
 #export AWS_ACCESS_KEY_ID
 #export AWS_SECRET_ACCESS_KEY
-
-# OO_OPENSHIFT_BINARY
-#
-# Path of a locally built openshift binary
-#
-# If this variable is set, then, the locally built openshift will be installed
-# in /usr/local/bin on the AWS machines.
-# If this variable is not set, then, openshift will be installed from the yum repository
-
-#export OO_OPENSHIFT_BINARY=$HOME/doc/prog/RedHat/origin/_output/local/go/bin/openshift
 
 # OO_AWS_REGION
 #
@@ -78,3 +78,16 @@
 # Default: m3.large
 
 #export OO_AWS_INSTANCE_TYPE=t2.micro
+
+################
+# LAN settings #
+################
+
+#
+# For the LAN setup, MASTERS (resp. MINIONS) are not the number of
+# masters (resp. minions), but a comma-separated list of IPs
+#
+
+#export MASTERS=192.168.122.249
+
+#export MINIONS=192.168.122.108,192.168.122.130
