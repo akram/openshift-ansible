@@ -25,7 +25,7 @@ Setup
 - Setup for a specific cloud:
   - [AWS](README_AWS.md)
   - [GCE](README_GCE.md)
-  - [LAN], on permise ](README_LAN.md) 
+  - [LAN, on permise ](README_LAN.md) 
 
 - Directory Structure:
   - [cloud.rb](cloud.rb) - light wrapper around Ansible
