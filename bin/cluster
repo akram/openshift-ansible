@@ -233,10 +233,10 @@ if __name__ == '__main__':
                              help='Deployment type. (default: origin)')
     meta_parser.add_argument('-o', '--option', action='append',
                              help='options')
-
+    # help command modifiers and options
     action_parser = parser.add_subparsers(dest='action', title='actions',
                                           description='Choose from valid actions')
-
+    # create command modifiers and options
     create_parser = action_parser.add_parser('create', help='Create a cluster',
                                              parents=[meta_parser])
     create_parser.add_argument('-m', '--masters', default=1, type=int,
@@ -250,6 +250,7 @@ if __name__ == '__main__':
                                              parents=[meta_parser])
     config_parser.set_defaults(func=cluster.config)
 
+    # terminate command modifiers and options
     terminate_parser = action_parser.add_parser('terminate',
                                                 help='Destroy a cluster',
                                                 parents=[meta_parser])
@@ -257,6 +258,7 @@ if __name__ == '__main__':
                                   help='Destroy cluster without confirmation')
     terminate_parser.set_defaults(func=cluster.terminate)
 
+    # update command modifiers and options
     update_parser = action_parser.add_parser('update',
                                              help='Update OpenShift across cluster',
                                              parents=[meta_parser])
@@ -264,6 +266,15 @@ if __name__ == '__main__':
                                help='Update cluster without confirmation')
     update_parser.set_defaults(func=cluster.update)
 
+    update_parser.add_argument('-d', '--delete-nodes', default=0, type=int,
+                               help='number of nodes to delete from cluster')
+    update_parser.set_defaults(func=cluster.update)
+
+    update_parser.add_argument('-a', '--add-nodes', default=0, type=int,
+                               help='number of nodes to add to cluster')
+    update_parser.set_defaults(func=cluster.update)
+
+    # list command modifiers and options
     list_parser = action_parser.add_parser('list', help='List VMs in cluster',
                                            parents=[meta_parser])
     list_parser.set_defaults(func=cluster.list)

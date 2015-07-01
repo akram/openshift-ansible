@@ -5,6 +5,9 @@
   changed_when: false
   failed_when: stack_show_result.rc != 0 and 'Stack not found' not in stack_show_result.stderr
 
+- debug:
+    msg: '{{ stack_show_result }}'
+
 - name: Create infra
   command: 'heat stack-create -f {{ openstack_infra_heat_stack }} -P cluster-id={{ cluster_id }} -P network-prefix={{ openstack_network_prefix }} -P dns-nameservers={{ openstack_network_dns | join(",") }} -P cidr={{ openstack_network_cidr }} -P ssh-incoming={{ openstack_ssh_access_from }} {{ openstack_network_prefix }}-stack'
   when: stack_show_result.rc == 1
