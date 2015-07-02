@@ -26,17 +26,17 @@
     with_items: groups['oo_hosts_to_terminate'] | default([])
     register: floating_ips_to_delete
 
-  - name: Terminate instance(s)
-    nova_compute:
-      name: "{{ hostvars[item].os_name }}"
-      state: absent
-    with_items: groups['oo_hosts_to_terminate'] | default([])
+  - debug:
+      msg: "oo_hosts_to_terminate : {{ groups['oo_hosts_to_terminate'] }}"
+#  - debug:
+#      msg: "floating_ips_to_delete : {{ floating_ips_to_delete.results | default([])}}"
 
-  - name: Delete floating IPs
-    command: "neutron floatingip-delete {{ item.stdout }}"
-    with_items: floating_ips_to_delete.results | default([])
+  - include: tasks/terminate_instances.yml
+    vars:
+      floating_ips_to_delete: "{{ floating_ips_to_delete.results | default([]) }}"
+      hosts_to_terminate: "{{ groups['oo_hosts_to_terminate'] | default([]) }}"
 
-  - name: Destroy the network
+  - name: Destroy the whole network
     command: "heat stack-delete {{ openstack_network_prefix }}-stack"
     register: stack_delete_result
     changed_when: stack_delete_result.rc == 0

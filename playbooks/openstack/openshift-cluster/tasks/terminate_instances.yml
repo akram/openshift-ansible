@@ -1,0 +1,12 @@
+
+- name: Delete floating IPs
+  command: "neutron floatingip-delete {{ item.stdout }}"
+  with_items: floating_ips_to_delete
+
+
+- name: Terminate instance(s)
+  nova_compute:
+    name: "{{ hostvars[item].os_name }}"
+    state: absent
+  with_items: hosts_to_terminate
+

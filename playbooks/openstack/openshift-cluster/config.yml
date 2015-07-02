@@ -32,4 +32,5 @@
     openshift_debug_level: 4
     openshift_deployment_type: "{{ deployment_type }}"
     openshift_first_master: "{{ groups.oo_first_master.0 }}"
-    openshift_hostname: "{{ ansible_default_ipv4.address }}"
+    openshift_hostname: "{{ ansible_default_ipv4.default }}"
+# tag_env-host-type_akram8-openshift-master

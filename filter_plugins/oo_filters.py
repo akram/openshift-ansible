@@ -223,6 +223,12 @@ class FilterModule(object):
         # Gather up the values for the list of keys passed in
         return [x for x in data if x[filter_attr]]
 
+    @staticmethod
+    def oo_hash(string, max='255'):
+        ''' Hashes a string to return an int lower than max
+        '''
+        return abs(hash(string)) % int(max)
+
     def filters(self):
         ''' returns a mapping of filters to methods '''
         return {
@@ -235,5 +241,7 @@ class FilterModule(object):
             "oo_ec2_volume_definition": self.oo_ec2_volume_definition,
             "oo_combine_key_value": self.oo_combine_key_value,
             "oo_split": self.oo_split,
-            "oo_filter_list": self.oo_filter_list
+            "oo_filter_list": self.oo_filter_list,
+            "oo_hash": self.oo_hash
+
         }

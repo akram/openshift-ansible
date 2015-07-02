@@ -1,7 +1,7 @@
 ---
 openstack_infra_heat_stack:     "{{ opt_infra_heat_stack  | default('files/heat_stack.yml') }}"
 openstack_network_prefix:       "{{ opt_network_prefix    | default('openshift-ansible-'+cluster_id) }}"
-openstack_network_cidr:         "{{ opt_net_cidr          | default('192.168.' + ( ( 1048576 | random % 256 ) | string() ) + '.0/24') }}"
+openstack_network_cidr:         "{{ opt_net_cidr          | default('192.168.' + ( ( cluster_id | oo_hash % 255 ) | string() ) + '.0/24') }}"
 openstack_network_external_net: "{{ opt_external_net      | default('external') }}"
 openstack_floating_ip_pools:    "{{ opt_floating_ip_pools | default('external')        | oo_split() }}"
 openstack_network_dns:          "{{ opt_dns               | default('8.8.8.8,8.8.4.4') | oo_split() }}"

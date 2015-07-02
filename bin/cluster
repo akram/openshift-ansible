@@ -103,6 +103,9 @@ class Cluster(object):
         playbook = "playbooks/{}/openshift-cluster/update.yml".format(args.provider)
         inventory = self.setup_provider(args.provider)
 
+        env['num_nodes_to_delete'] = args.delete_nodes
+        env['num_nodes_to_add'] = args.add_nodes
+
         return self.action(args, inventory, env, playbook)
 
     def service(self, args):

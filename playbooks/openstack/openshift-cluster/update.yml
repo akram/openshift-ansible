@@ -5,14 +5,52 @@
   vars_files:
   - vars.yml
   tasks:
-  - name: Evaluate oo_hosts_to_update
-    add_host:
-      name: "{{ item }}"
-      groups: oo_hosts_to_update
-      ansible_ssh_user: "{{ deployment_vars[deployment_type].ssh_user }}"
-      ansible_sudo: "{{ deployment_vars[deployment_type].sudo }}"
-    with_items: groups["tag_env-host-type_{{ cluster_id }}-openshift-master"] | union(groups["tag_env-host-type_{{ cluster_id }}-openshift-node"]) | default([])
 
-- include: ../../common/openshift-cluster/update_repos_and_packages.yml
+  - debug:
+      msg: 'groups={{groups}}'
+
+#  - debug:
+#      msg: 'number of nodes to delete={{num_nodes_to_delete}}'
+
+#  - debug:
+#      msg: 'number of nodes to add={{num_nodes_to_add}}'
+
+  - debug:
+      msg: 'subgroup={{ groups| batch(3) | slice(1) | list  }}'
+
+
+  # Start by deleting the number of requested nodes
+#  - name: Evaluate oo_hosts_to_delete
+#    add_host:
+#      name: "{{ item }}"
+#      groups: oo_hosts_to_delete
+#      ansible_ssh_user: "{{ deployment_vars[deployment_type].ssh_user }}"
+#      ansible_sudo: "{{ deployment_vars[deployment_type].sudo }}"
+#    with_items: groups["tag_env-host-type_{{ cluster_id }}-openshift-node"] | slice( num_nodes_to_delete) ) | default([])
+
+
+  # Then add the number of requested node, but without provisioning
+#  - name: Evaluate oo_hosts_to_add
+#    add_host:
+#      name: "{{ item }}"
+#      groups: oo_hosts_to_add
+#      ansible_ssh_user: "{{ deployment_vars[deployment_type].ssh_user }}"
+#      ansible_sudo: "{{ deployment_vars[deployment_type].sudo }}"
+#    with_items: groups["tag_env-host-type_{{ cluster_id }}-openshift-node"] | slice( env('num_nodes_to_add') ) | default([])
+
+
+  # Update everything, including freshly added nodes
+#  - name: Evaluate oo_hosts_to_update
+#    add_host:
+#      name: "{{ item }}"
+#      groups: oo_hosts_to_update
+#      ansible_ssh_user: "{{ deployment_vars[deployment_type].ssh_user }}"
+#      ansible_sudo: "{{ deployment_vars[deployment_type].sudo }}"
+#    with_items: '{{ groups["tag_env-host-type_{{ cluster_id }}-openshift-master"]
+#                    | union(groups["tag_env-host-type_{{ cluster_id }}-openshift-node"])
+#                    | union(groups["oo_hosts_to_add"])
+#                    | default([]) }}'
+
+# - include: ../../common/openshift-cluster/update_repos_and_packages.yml
 
 - include: config.yml
