@@ -22,7 +22,7 @@ On RHEL / CentOS / Fedora:
  alternatively, if OpenStack tools are not available as RPMs for your distribution, you can install them using pip 
 ```
   yum install -y python-pip
-  pip install python-novaclient python-neutronclient python-heatclient
+  pip install python-novaclient python-neutronclient python-heatclient stevedore oslo.config debtcollector
 ```
 
 Configuration
