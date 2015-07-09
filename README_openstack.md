@@ -19,6 +19,11 @@ On RHEL / CentOS / Fedora:
 ```
   yum install -y ansible python-novaclient python-neutronclient python-heatclient
 ```
+ alternatively, if OpenStack tools are not available as RPMs for your distribution, you can install them using pip 
+```
+  yum install -y python-pip
+  pip install python-novaclient python-neutronclient python-heatclient
+```
 
 Configuration
 -------------
