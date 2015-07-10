@@ -100,11 +100,11 @@ class Cluster(object):
         """
         env = {'cluster_id': args.cluster_id,
                'deployment_type': self.get_deployment_type(args)}
-        playbook = "playbooks/{}/openshift-cluster/update.yml".format(args.provider)
+        playbook = "playbooks/{}/openshift-cluster/update2.yml".format(args.provider)
         inventory = self.setup_provider(args.provider)
 
-        env['num_nodes_to_delete'] = args.delete_nodes
-        env['num_nodes_to_add'] = args.add_nodes
+        env['num_masters'] = args.masters
+        env['num_nodes'] = args.nodes
 
         return self.action(args, inventory, env, playbook)
 
@@ -269,12 +269,11 @@ if __name__ == '__main__':
                                help='Update cluster without confirmation')
     update_parser.set_defaults(func=cluster.update)
 
-    update_parser.add_argument('-d', '--delete-nodes', default=0, type=int,
-                               help='number of nodes to delete from cluster')
-    update_parser.set_defaults(func=cluster.update)
+    update_parser.add_argument('-m', '--masters', default=1, type=int,
+                               help='number of masters to create in cluster')
+    update_parser.add_argument('-n', '--nodes', default=2, type=int,
+                               help='number of nodes to create in cluster')
 
-    update_parser.add_argument('-a', '--add-nodes', default=0, type=int,
-                               help='number of nodes to add to cluster')
     update_parser.set_defaults(func=cluster.update)
 
     # list command modifiers and options

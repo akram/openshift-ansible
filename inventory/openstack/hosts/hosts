@@ -1,2 +1,3 @@
 localhost ansible_sudo=no connection=local  ansible_python_interpreter=/usr/local/bin/python2 openshift_hostname=openshift-hostname-hardcoded
 # ansible_python_interpreter=/usr/local/bin/python2 connection=local
+
